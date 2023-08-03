@@ -1,0 +1,8 @@
+{% load static %}
+
+<link rel="stylesheet" href="{% static '/kpro_app/css/style.css' %}">
+<input type="hidden" id="device_verify__challenge" name="chall" value="{{ challenge }}">
+<canvas id="device_verify__qr"></canvas>
+<input id="device_verify__next-button" type="button" value="Next">
+<div id="reader" width="600px"></div>
+<script src="{% static '/kpro_app/js/device.js' %}"></script>
