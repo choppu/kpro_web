@@ -1,13 +1,13 @@
 from django.db import models
 import datetime
 
-version_str = datetime.datetime.now()
+version_str = datetime.datetime.utcnow()
 
 # Create your models here.
 
 class Device(models.Model):
   uid = models.CharField(max_length=32, unique=True)
-  public_key = models.CharField(max_length=65, unique=True)
+  public_key = models.CharField(max_length=130, unique=True)
   verification_start_date = models.DateTimeField(null=True, blank=True, default=None)
   success_counter = models.IntegerField(default=0)
 

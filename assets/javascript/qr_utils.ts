@@ -1,4 +1,4 @@
-import {UREncoder} from '@ngraveio/bc-ur'
+import {URDecoder, UREncoder} from '@ngraveio/bc-ur'
 
 export namespace QRUtils {
 
@@ -21,15 +21,32 @@ export namespace QRUtils {
     });
   }
 
-  export function generateQRPart(encoder: UREncoder, qrCanv: any) : void {
+  export function generateQRPart(encoder: UREncoder, qrCanv: any, timeout: boolean) : void {
     let part = encoder.nextPart();
-    console.log(part);
-
     displayQRPart(part.toUpperCase(), qrCanv);
-    setTimeout(() => {generateQRPart(encoder, qrCanv)}, 500);
+
+    if(timeout) {
+      setTimeout(() => {generateQRPart(encoder, qrCanv, true)}, 500);
+    }
   }
 
   export function encodeChallenge(challenge: String) : Buffer {
     return Buffer.from("a20101065820" + challenge, "hex");
+  }
+
+  export function decodeQR(decoder: URDecoder, qr: string) : Buffer {
+    while (!decoder.isComplete()) {
+      decoder.receivePart(qr);
+    }
+
+    if (decoder.isSuccess()) {
+      const ur = decoder.resultUR();
+      return ur.decodeCBOR();
+    }
+    else {
+      const error = decoder.resultError()
+      console.log('Error found while decoding', error)
+      return;
+    }
   }
 }

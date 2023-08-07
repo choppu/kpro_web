@@ -17,10 +17,10 @@ async function generateDBQR() : Promise<void> {
   const dbBuff = QRUtils.toBuffer(dbArr);
 
   const ur = new UR(dbBuff, "fs-data");
-  const maxFragmentLength = 630
-  const encoder = new UREncoder(ur, maxFragmentLength)
+  const maxFragmentLength = 630;
+  const encoder = new UREncoder(ur, maxFragmentLength);
 
-  setTimeout(() => {QRUtils.generateQRPart(encoder, dbQR)}, 500);
+  setTimeout(() => {QRUtils.generateQRPart(encoder, dbQR, true)}, 500);
 }
 
 generateDBQR();

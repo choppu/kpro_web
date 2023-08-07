@@ -2,7 +2,7 @@ from django.contrib import admin
 from django import forms
 from django.contrib.admin.models import LogEntry
 from django.urls import path
-from django.db import IntegrityError, transaction
+from django.db import IntegrityError
 from django.contrib import messages
 import csv
 from django.shortcuts import render
