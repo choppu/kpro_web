@@ -3,6 +3,7 @@ from django.http import HttpResponse
 from kpro_web.settings import TEMPLATE_DIR
 from secp256k1Crypto import PublicKey, PrivateKey
 from .models import Device
+from cbor2 import dumps
 
 import secrets
 import json
@@ -13,8 +14,24 @@ import os
 
 # Create your views here.
 APP_TEMPLATE_DIR = TEMPLATE_DIR + '/kpro_app/'
-enc_key = os.environ['DB_ENCRYPTION_KEY']
+enc_key = os.environ['DEVICE_VERIFICATION_ENC_KEY']
 c = "f55a3898e7ff89aa4320533be775d6f4ac7eb15a8b8e3639fcab051fce6a313f"
+
+state = {
+  "dev_auth_init": 1,
+  "dev_auth_device": 2,
+  "dev_auth_server": 3
+}
+
+keys = {
+  "dev_auth_device": 1,
+  "device_id": 2,
+  "first_auth": 3,
+  "auth_time": 4,
+  "auth_count": 5,
+  "challenge": 6,
+  "signature": 7
+}
 
 def index(request):
   context = {
@@ -71,8 +88,17 @@ def verify(request):
       key = PrivateKey(bytes(bytearray.fromhex(enc_key)), raw=True)
       sig = key.ecdsa_sign(m_hash, raw=True)
       m_signature = key.ecdsa_serialize_compact(sig)
+      cbor_data = {
+        keys['dev_auth_device']: state['dev_auth_server'],
+        keys['first_auth']: int(first_verification),
+        keys['auth_time']: int(verification_date),
+        keys['auth_count']: device.success_counter,
+        keys['signature']: m_signature
+      }
 
-      resp = {'success': 'Device successfully verified', 'first_auth': first_verification, 'last_auth': verification_date, 'counter': device.success_counter, 'signature': m_signature.hex()}
+      payload = dumps(cbor_data).hex()
+
+      resp = {'success': 'Device successfully verified', 'uid': device.uid, 'first_auth': first_verification, 'last_auth': verification_date, 'counter': device.success_counter, 'signature': m_signature.hex(), 'payload': payload}
     else:
       resp = {'error': 'Invalid signature'}
 

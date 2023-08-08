@@ -2,12 +2,28 @@ import { QRUtils } from "./qr_utils";
 import {UR, UREncoder, URDecoder} from '@ngraveio/bc-ur'
 import {Html5Qrcode} from "html5-qrcode";
 
+
+
 const QRious = require('qrious');
 const postReqURL = './verify';
-const verState = {1: "dev_auth_init", 2: "dev_auth_device", 3: "dev_auth_server"};
-const keys = {1: "dev_auth_device", 2: "device_id", 3: "first_auth", 4: "auth_time", 5: "auth_count", 6: "challenge", 7: "signature", 8: "initial_challenge"};
+const verState = {
+  1: "dev_auth_init",
+  2: "dev_auth_device",
+  3: "dev_auth_server"
+};
+const keys = {
+  1: "dev_auth_device",
+  2: "device_id",
+  3: "first_auth",
+  4: "auth_time",
+  5: "auth_count",
+  6: "challenge",
+  7: "signature",
+  8: "initial_challenge"
+};
+const maxFragmentLength = 500
 
-async function verify(data: FormData, csrftoken: string, url: string) : Promise<Response|void> {
+async function verify(data: FormData, csrftoken: string, url: string) : Promise<any|void> {
   try {
     return await fetch(url, {
       method: 'POST',
@@ -15,7 +31,7 @@ async function verify(data: FormData, csrftoken: string, url: string) : Promise<
       body: data,
       mode: 'same-origin'
     }).then(async (data) => {
-      console.log(await data.json());
+      return await data.json();
     });
   } catch(err) {
     console.log(err);
@@ -31,7 +47,7 @@ async function onScanSuccess(decodedText: any, challenge: string, decoder: URDec
   const data = QRUtils.decodeQR(decoder, decodedText);
   const reqData = new FormData();
   const status = data[1];
-
+  console.log(verState[status as keyof typeof verState])
   if (verState[status as keyof typeof verState] == "dev_auth_device") {
     const deviceId = (data[2] as any).toString("hex");
     const deviceChallenge = (data[6] as any).toString("hex");
@@ -42,7 +58,12 @@ async function onScanSuccess(decodedText: any, challenge: string, decoder: URDec
     reqData.append(keys[7], signature);
     reqData.append(keys[8], challenge);
 
-    verify(reqData, csrftoken, postReqURL);
+    const r = await verify(reqData, csrftoken, postReqURL) as any;
+    console.log(r);
+    const successQR = new QRious({element: document.getElementById('device_success__qr')}) as any;
+    const ur = new UR(Buffer.from(r.payload, "hex"), "dev-auth");
+    const encoder = new UREncoder(ur, maxFragmentLength);
+    QRUtils.generateQRPart(encoder, successQR, false);
   } else {
     console.log("QR error");
   }
@@ -57,15 +78,14 @@ async function handleVerifyDevice() : Promise<void> {
   const challenge = document.getElementById('device_verify__challenge') as HTMLInputElement;
   const csrftoken = document.getElementById('device_verify__csfr') as HTMLInputElement;
   const next_btn = document.getElementById("device_verify__next-button");
-  const dbQR = new QRious({element: document.querySelector('canvas')}) as any;
+  const verifyQR = new QRious({element: document.getElementById('device_verify__qr')}) as any;
   const payload = QRUtils.encodeChallenge(challenge.value);
   const ur = new UR(payload, "dev-auth");
-  const maxFragmentLength = 500
   const encoder = new UREncoder(ur, maxFragmentLength);
   const decoder = new URDecoder();
   const html5QrCode = new Html5Qrcode("device_verify__qr-reader");
   const config = {fps: 10, qrbox: 350, aspectRatio: 1};
-  QRUtils.generateQRPart(encoder, dbQR, false);
+  QRUtils.generateQRPart(encoder, verifyQR, false);
 
   const cameraId = await Html5Qrcode.getCameras().then(devices => {
     if (devices && devices.length) {
