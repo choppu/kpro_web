@@ -16,8 +16,7 @@ export namespace QRUtils {
   export function displayQRPart(part: any, qrCanv: any) : void {
     qrCanv.set({
       size: 450,
-      value: part,
-      padding: 15
+      value: part
     });
   }
 

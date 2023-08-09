@@ -23,6 +23,6 @@ from django.conf.urls.static import static
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('db_updater/', include("apps.db_updater.urls")),
-    path('device_verifier/', include("apps.device_verifier.urls")),
+    path('db/', include("apps.db_updater.urls")),
+    path('verify/', include("apps.device_verifier.urls")),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

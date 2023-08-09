@@ -1,4 +1,6 @@
+{% extends './base.html' %}
 {% load static %}
+{% block content %}
 <link rel="stylesheet" href="{% static '/kpro_app/css/style.css' %}">
 <input type="hidden" id="device_verify__challenge" name="chall" value="{{ challenge }}">
 <input type="hidden" id="device_verify__csfr" name="csfr" value="{{ csrf_token }}">
@@ -7,3 +9,4 @@
 <div id="device_verify__qr-reader" width="400px"></div>
 <canvas id="device_success__qr"></canvas>
 <script src="{% static '/kpro_app/js/device.js' %}"></script>
+{% endblock %}

@@ -6,6 +6,9 @@ version_str = datetime.datetime.now()
 # Create your models here.
 
 class DB(models.Model):
+  class Meta:
+    verbose_name_plural = "DB"
+
   erc20_url = models.CharField(max_length=2000, null=True, blank=True)
   chain_url = models.CharField(max_length=2000, null=True, blank=True)
   version = models.CharField(max_length=12, default = version_str.strftime("%Y%m%d%H%M"))

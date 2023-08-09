@@ -13,4 +13,4 @@ def index(request):
     "db_path": db.version + '/db.bin'
   }
 
-  return render(request, APP_TEMPLATE_DIR + 'index.html', context)
+  return render(request, APP_TEMPLATE_DIR + 'db.html', context)
