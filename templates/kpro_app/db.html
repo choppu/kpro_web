@@ -4,11 +4,11 @@
 <input type="hidden" id="db_updater__db-version" name="custId" value="{% get_media_prefix %}{{ db_path }}">
 <div class="kpro_web__db-container">
   <div class="kpro_web__db-qr-container">
-    <canvas id="qr"></canvas>
-  </div>
-  <div class="db_updater__label-container">
-   <h1 class="db_updater__label">Scan QR to update ERC20 &amp; Chain Database</h1>
+    <canvas id="qr" class="kpro_web__db-qr"></canvas>
   </div>
 </div>
+<div class="db_updater__label-container">
+  <h1 class="db_updater__label">Scan QR to update ERC20 &amp; Chain Database</h1>
+ </div>
 <script src="{% static '/kpro_app/js/token_db.js' %}"></script>
 {% endblock %}

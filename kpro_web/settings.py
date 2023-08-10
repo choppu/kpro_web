@@ -36,7 +36,7 @@ DB_ENCRYPTION_KEY = env.str("DB_ENCRYPTION_KEY")
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['192.168.1.68', '127.0.0.1']
+ALLOWED_HOSTS = ['192.168.1.68', '127.0.0.1', 'bitgamma.hopto.org', 'ksenia.bitgamma.com', 'localhost']
 
 
 # Application definition
@@ -49,7 +49,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'apps.db_updater',
-    'apps.device_verifier'
+    'apps.device_verifier',
+    "django_extensions"
 ]
 
 MIDDLEWARE = [

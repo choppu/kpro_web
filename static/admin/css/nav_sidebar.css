@@ -15,7 +15,7 @@
 
 .toggle-nav-sidebar:hover,
 .toggle-nav-sidebar:focus {
-    background-color: var(--body-bg-lighter);
+    background-color: white;
 }
 
 #nav-sidebar {

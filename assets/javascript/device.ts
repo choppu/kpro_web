@@ -59,11 +59,12 @@ async function onScanSuccess(decodedText: any, challenge: string, decoder: URDec
     reqData.append(keys[8], challenge);
 
     const r = await verify(reqData, csrftoken, postReqURL) as any;
-    console.log(r);
-    const successQR = new QRious({element: document.getElementById('device_success__qr')}) as any;
-    const ur = new UR(Buffer.from(r.payload, "hex"), "dev-auth");
-    const encoder = new UREncoder(ur, maxFragmentLength);
-    QRUtils.generateQRPart(encoder, successQR, false);
+    if(r['message'] == 'success') {
+      const successQR = new QRious({element: document.getElementById('device_success__qr')}) as any;
+      const ur = new UR(Buffer.from(r.payload, "hex"), "dev-auth");
+      const encoder = new UREncoder(ur, maxFragmentLength);
+      QRUtils.generateQRPart(encoder, successQR, false);
+    }
   } else {
     console.log("QR error");
   }

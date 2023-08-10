@@ -106,13 +106,13 @@ body {
 /* LINKS */
 
 a:link, a:visited {
-    color: var(--link-fg);
+    color: rgb(150, 150, 150);
     text-decoration: none;
     transition: color 0.15s, background 0.15s;
 }
 
 a:focus, a:hover {
-    color: var(--link-hover-color);
+    color: rgb(150, 150, 150);
 }
 
 a:focus {
