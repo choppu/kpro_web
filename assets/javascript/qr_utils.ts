@@ -13,19 +13,19 @@ export namespace QRUtils {
     return buffer;
   }
 
-  export function displayQRPart(part: any, qrCanv: any) : void {
+  export function displayQRPart(part: any, qrCanv: any, size: number) : void {
     qrCanv.set({
-      size: 450,
+      size: size,
       value: part
     });
   }
 
-  export function generateQRPart(encoder: UREncoder, qrCanv: any, timeout: boolean) : void {
+  export function generateQRPart(encoder: UREncoder, qrCanv: any, timeout: boolean, size: number) : void {
     let part = encoder.nextPart();
-    displayQRPart(part.toUpperCase(), qrCanv);
+    displayQRPart(part.toUpperCase(), qrCanv, size);
 
     if(timeout) {
-      setTimeout(() => {generateQRPart(encoder, qrCanv, true)}, 500);
+      setTimeout(() => {generateQRPart(encoder, qrCanv, true, size)}, 500);
     }
   }
 

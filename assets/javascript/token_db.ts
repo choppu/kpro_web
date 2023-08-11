@@ -20,7 +20,7 @@ async function generateDBQR() : Promise<void> {
   const maxFragmentLength = 630;
   const encoder = new UREncoder(ur, maxFragmentLength);
 
-  setTimeout(() => {QRUtils.generateQRPart(encoder, dbQR, true)}, 500);
+  setTimeout(() => {QRUtils.generateQRPart(encoder, dbQR, true, 450)}, 500);
 }
 
 generateDBQR();

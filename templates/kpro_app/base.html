@@ -6,6 +6,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="{% static '/kpro_app/css/style.css' %}">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Sharp" rel="stylesheet">
 </head>
 <body>
   {% block menu %}
@@ -13,10 +14,8 @@
   {% endblock %}
   {% block content %}
   {% endblock %}
+  {% block footer %}
+  {% include './footer.html' %}
+  {% endblock %}
 </body>
-<div class="kpro__web_footer-container group">
-  <footer class="kpro__web_footer">
-    <span>&copy; {% now 'Y' %}</span>
-  </footer>
-</div>
 </html>

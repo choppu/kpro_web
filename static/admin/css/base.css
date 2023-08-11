@@ -89,6 +89,20 @@ html[data-theme="light"],
         "Noto Color Emoji";
 }
 
+.group:before,
+.group:after {
+  content: " ";
+  display: table;
+}
+
+.group:after {
+  clear: both;
+}
+
+.group {
+  zoom: 1;
+}
+
 html, body {
     height: 100%;
 }
@@ -701,7 +715,10 @@ td ul.errorlist + input, td ul.errorlist + select, td ul.errorlist + textarea {
 /* BREADCRUMBS */
 
 div.breadcrumbs {
-    display: none;
+    display: inherit;
+    background-color: rgb(71, 70, 75);
+    padding: 1em 1%;
+    box-sizing: border-box;
 }
 
 /* ACTION ICONS */
@@ -1124,4 +1141,33 @@ a.deletelink:focus, a.deletelink:hover {
 
 .base-svgs {
     display: none;
+}
+
+.csv-container {
+    display: block;
+    width: 100%;
+    min-height: 80px;
+    margin: .5em auto;
+}
+
+.csv-button, .csv-button:focus, .csv-button:hover, .csv-button:visited {
+    float: right;
+    width: 100px;
+    padding: 7px 12px;
+    background: var(--object-tools-bg);
+    font-weight: 400;
+    font-size: 0.6875rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    border-radius: 15px;
+    color: white;
+}
+
+.admin-branding {
+    padding: 0;
+    margin: 0;
+    margin-inline-end: 20px;
+    font-weight: 300;
+    font-size: 1.5rem;
+    color: var(--header-branding-color);
 }

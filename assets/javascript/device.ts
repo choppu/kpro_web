@@ -21,7 +21,17 @@ const keys = {
   7: "signature",
   8: "initial_challenge"
 };
-const maxFragmentLength = 500
+const maxFragmentLength = 500;
+
+const step1Container = document.getElementById("kpro_web__verify-step1");
+const step2Container = document.getElementById("kpro_web__verify-step2");
+const step3Container = document.getElementById("kpro_web__verify-step3");
+const step4Container = document.getElementById("kpro_web__verify-step4");
+const qrMessage = document.getElementById("qr-message") as HTMLSpanElement;
+const qrUID = document.getElementById("qr-uid") as HTMLSpanElement;
+const qrFirstAuth = document.getElementById("qr-first-auth") as HTMLSpanElement;
+const qrLastAuth = document.getElementById("qr-last-auth") as HTMLSpanElement;
+const qrCounter = document.getElementById("qr-counter") as HTMLSpanElement;
 
 async function verify(data: FormData, csrftoken: string, url: string) : Promise<any|void> {
   try {
@@ -38,35 +48,71 @@ async function verify(data: FormData, csrftoken: string, url: string) : Promise<
   }
 }
 
-async function onScanSuccess(decodedText: any, challenge: string, decoder: URDecoder, csrftoken: string, html5QrCode: Html5Qrcode) : Promise<void> {
+async function stopScanning(html5QrCode:Html5Qrcode) : Promise<void> {
   if (html5QrCode.isScanning) {
     await html5QrCode.stop();
     html5QrCode.clear();
   }
+}
+
+function handleDeviceResponse(resp: Buffer, challenge: string) : FormData {
+  const reqData = new FormData();
+  const deviceId = (resp[2] as any).toString("hex");
+  const deviceChallenge = (resp[6] as any).toString("hex");
+  const signature = (resp[7] as any).toString("hex");
+
+  reqData.append(keys[2], deviceId);
+  reqData.append(keys[6], deviceChallenge);
+  reqData.append(keys[7], signature);
+  reqData.append(keys[8], challenge);
+
+  return reqData;
+}
+
+function handleServerResponse(r: any) : void {
+  qrMessage.innerHTML = r['message'];
+
+  if(r['status'] == 'success') {
+    const firstAuthDate = new Date(r['first_auth']);
+    const lastAuthDate = new Date(r['last_auth']);
+
+    qrUID.innerHTML = 'UID: ' + r['uid'];
+    qrFirstAuth.innerHTML = 'First Verification: ' + firstAuthDate.toDateString() + ", " + firstAuthDate.getHours() + ":" + firstAuthDate.getMinutes();
+    qrLastAuth.innerHTML = 'Last Verification: ' + lastAuthDate.toDateString() + ", " + lastAuthDate.getHours() + ":" + lastAuthDate.getMinutes();
+    qrCounter.innerHTML = 'Verification Count: ' + r['counter'];
+  }
+}
+
+function handleVerificationComplete(r: any) : void {
+  step3Container.classList.add('kpro_web__display-none');
+  step4Container.classList.remove('kpro_web__display-none');
+
+  if(r['status'] == 'success') {
+    const successQR = new QRious({element: document.getElementById('device_success__qr')}) as any;
+    const ur = new UR(Buffer.from(r.payload, "hex"), "dev-auth");
+    const encoder = new UREncoder(ur, maxFragmentLength);
+
+    QRUtils.generateQRPart(encoder, successQR, false, 400);
+  }
+
+  handleServerResponse(r);
+}
+
+async function onScanSuccess(decodedText: any, challenge: string, decoder: URDecoder, csrftoken: string, html5QrCode: Html5Qrcode) : Promise<void> {
+  await stopScanning(html5QrCode);
 
   const data = QRUtils.decodeQR(decoder, decodedText);
-  const reqData = new FormData();
   const status = data[1];
-  console.log(verState[status as keyof typeof verState])
+
   if (verState[status as keyof typeof verState] == "dev_auth_device") {
-    const deviceId = (data[2] as any).toString("hex");
-    const deviceChallenge = (data[6] as any).toString("hex");
-    const signature = (data[7] as any).toString("hex");
-
-    reqData.append(keys[2], deviceId);
-    reqData.append(keys[6], deviceChallenge);
-    reqData.append(keys[7], signature);
-    reqData.append(keys[8], challenge);
-
+    const reqData = handleDeviceResponse(data, challenge);
     const r = await verify(reqData, csrftoken, postReqURL) as any;
-    if(r['message'] == 'success') {
-      const successQR = new QRious({element: document.getElementById('device_success__qr')}) as any;
-      const ur = new UR(Buffer.from(r.payload, "hex"), "dev-auth");
-      const encoder = new UREncoder(ur, maxFragmentLength);
-      QRUtils.generateQRPart(encoder, successQR, false);
-    }
+    handleVerificationComplete(r);
+
   } else {
-    console.log("QR error");
+    step3Container.classList.add('kpro_web__display-none');
+    step4Container.classList.remove('kpro_web__display-none');
+    qrMessage.innerHTML = 'Error: Invalid QR Code. Please make sure you are scanning the QR from your device.';
   }
 
 }
@@ -79,14 +125,22 @@ async function handleVerifyDevice() : Promise<void> {
   const challenge = document.getElementById('device_verify__challenge') as HTMLInputElement;
   const csrftoken = document.getElementById('device_verify__csfr') as HTMLInputElement;
   const next_btn = document.getElementById("device_verify__next-button");
+  const scan_btn = document.getElementById("device_verify__scan-button");
   const verifyQR = new QRious({element: document.getElementById('device_verify__qr')}) as any;
   const payload = QRUtils.encodeChallenge(challenge.value);
   const ur = new UR(payload, "dev-auth");
   const encoder = new UREncoder(ur, maxFragmentLength);
   const decoder = new URDecoder();
   const html5QrCode = new Html5Qrcode("device_verify__qr-reader");
-  const config = {fps: 10, qrbox: 350, aspectRatio: 1};
-  QRUtils.generateQRPart(encoder, verifyQR, false);
+  const config = {fps: 10, qrbox: 600, aspectRatio: 1};
+  QRUtils.generateQRPart(encoder, verifyQR, false, 400);
+
+  next_btn.addEventListener("click", () => {
+    if (step2Container.classList.contains('kpro_web__display-none')) {
+      step1Container.classList.add('kpro_web__display-none');
+      step2Container.classList.remove('kpro_web__display-none');
+    }
+  });
 
   const cameraId = await Html5Qrcode.getCameras().then(devices => {
     if (devices && devices.length) {
@@ -94,7 +148,9 @@ async function handleVerifyDevice() : Promise<void> {
     }
   });
 
-  next_btn.addEventListener("click", () => {
+  scan_btn.addEventListener("click", async () => {
+    step2Container.classList.add('kpro_web__display-none');
+    step3Container.classList.remove('kpro_web__display-none');
     html5QrCode.start(
       cameraId,
       config,

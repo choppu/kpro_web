@@ -50,7 +50,7 @@ def verify_signature(uid, challenge, signature, public_key):
 
   return public_key.ecdsa_verify(h, sig, raw=True)
 
-def success(device, challenge):
+def success(device, challenge, mess):
   m = hashlib.sha256()
 
   verification_date = time.mktime(datetime.datetime.utcnow().timetuple())
@@ -81,7 +81,7 @@ def success(device, challenge):
 
   payload = dumps(cbor_data).hex()
 
-  return {'status': 'success', 'message': 'Device successfully verified', 'uid': device.uid, 'first_auth': first_verification, 'last_auth': verification_date, 'counter': device.success_counter, 'signature': m_signature.hex(), 'payload': payload}
+  return {'status': 'success', 'message': mess, 'uid': device.uid, 'first_auth': first_verification, 'last_auth': verification_date, 'counter': device.success_counter, 'signature': m_signature.hex(), 'payload': payload}
 
 def verify(request):
   if request.method == 'POST':
@@ -94,18 +94,19 @@ def verify(request):
     try:
       device = Device.objects.get(uid=device_id)
     except:
-      resp = {'status': 'error', 'message': 'No device ' + device_id + ' found'}
+      resp = {'status': 'error', 'message': 'Error: No device ' + device_id + ' found'}
 
     if verify_signature(device_id, initial_challenge, signature, device.public_key):
-      m = hashlib.sha256()
+      mess = 'Success: Your device is genuine. This is not the first time the device was verified.'
+
       if (device.verification_start_date == None):
         device.verification_start_date = datetime.datetime.utcnow()
-
+        mess = 'Success: First verification. Your device is genuine.'
       device.success_counter = device.success_counter + 1
       device.save()
 
-      resp = success(device, challenge)
+      resp = success(device, challenge, mess)
     else:
-      resp = {'status': 'error', 'message': 'Invalid signature'}
+      resp = {'status': 'error', 'message': 'Error: Invalid signature.'}
 
     return HttpResponse(json.dumps(resp), content_type='application/json')
