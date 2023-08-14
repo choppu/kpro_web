@@ -44,13 +44,13 @@
        stroke-width="1.5"
        stroke-linecap="round"
        id="path183"
-       style="stroke:#ffffff;stroke-opacity:1" />
+       style="stroke:#666;stroke-opacity:1" />
     <path
        d="m 8.0035842,3.4811892 c 1.47087,-0.85085 3.1785998,-1.33782 4.9999998,-1.33782 5.5228,0 10,4.47715 10,9.9999998 0,5.5228 -4.4772,10 -10,10 -5.5228498,0 -9.9999998,-4.4772 -9.9999998,-10 0,-1.8214 0.48697,-3.5291298 1.33782,-4.9999998"
        stroke="#1c274c"
        stroke-width="1.5"
        stroke-linecap="round"
        id="path185"
-       style="stroke:#fffffc;stroke-opacity:1" />
+       style="stroke:#666;stroke-opacity:1" />
   </g>
 </svg>
