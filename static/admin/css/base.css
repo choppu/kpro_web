@@ -1150,8 +1150,8 @@ a.deletelink:focus, a.deletelink:hover {
     margin: .5em auto;
 }
 
-.csv-button, .csv-button:focus, .csv-button:hover, .csv-button:visited {
-    float: right;
+.csv-button, .csv-button:focus, .csv-button:hover, .csv-button:visited, .csv-button:link {
+
     width: 100px;
     padding: 7px 12px;
     background: var(--object-tools-bg);
@@ -1170,4 +1170,20 @@ a.deletelink:focus, a.deletelink:hover {
     font-weight: 300;
     font-size: 1.5rem;
     color: var(--header-branding-color);
+}
+
+.csv-container-form-field {
+    position: relative;
+    width: 100px;
+    float: right;
+}
+
+.csv-button-input {
+    opacity: 0;
+    position: absolute;
+    left: 0;
+}
+
+.main.shifted > #nav-sidebar + .content {
+    max-width: 100%;
 }

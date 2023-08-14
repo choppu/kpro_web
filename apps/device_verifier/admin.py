@@ -5,16 +5,13 @@ from django.urls import path
 from django.db import IntegrityError
 from django.contrib import messages
 import csv
-from django.shortcuts import render
+from django.shortcuts import redirect
 import codecs
 
 
 # Register your models here.
 
 from .models import Device
-
-class ImportDevicesCSVForm(forms.Form):
-    csv_file = forms.FileField()
 
 class DeviceVerifyForm(forms.ModelForm):
     class Meta:
@@ -31,7 +28,6 @@ class DeviceVerifyForm(forms.ModelForm):
             'verification_start_date': forms.TextInput(attrs={'readonly': 'readonly'}),
             'success_counter': forms.TextInput(attrs={'readonly': 'readonly'}),
         }
-
 class DeviceVerifyAdmin(admin.ModelAdmin):
     list_display = ('uid', 'public_key', 'verification_start_date', 'success_counter')
     form = DeviceVerifyForm
@@ -60,9 +56,7 @@ class DeviceVerifyAdmin(admin.ModelAdmin):
                 if 'UNIQUE constraint' in str(e.args):
                     msg = "Device already exists. Please check your csv."
                     self.message_user(request, msg, level=messages.ERROR)
-        form = ImportDevicesCSVForm()
-        payload = {"form": form}
-        return render(request, "admin/csv_form.html", payload)
+        return redirect('/admin/device_verifier/device')
 
     def has_change_permission(self, request, obj=None):
         return False
