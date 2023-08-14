@@ -380,6 +380,10 @@ body {
     height: 100%;
   }
 
+  .kpro_web__btn-centered {
+    padding: 6.5em 0;
+  }
+
   .kpro_web__db-container, .kpro_web__device-container {
     width: 90%;
     margin: 0 auto;
