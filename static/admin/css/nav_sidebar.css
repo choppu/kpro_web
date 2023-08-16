@@ -103,7 +103,7 @@
 }
 
 .main.shifted > #nav-sidebar + .content {
-    max-width: 100%;
+    max-width: calc(100% - 300px);
 }
 
 @media (max-width: 767px) {

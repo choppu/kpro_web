@@ -1102,7 +1102,8 @@ a.deletelink:focus, a.deletelink:hover {
     line-height: 22px;
     margin: 0;
     border-top: 1px solid var(--hairline-color);
-    width: 100%;
+    width: 80%;
+    box-sizing: border-box;
 }
 
 .paginator a:link, .paginator a:visited {
@@ -1181,9 +1182,20 @@ a.deletelink:focus, a.deletelink:hover {
 .csv-button-input {
     opacity: 0;
     position: absolute;
+    width: 100px;
     left: 0;
 }
 
 .main.shifted > #nav-sidebar + .content {
     max-width: 100%;
+}
+
+@media (max-width: 767px) {
+    .csv-container-form-field {
+        float: left;
+    }
+
+    .csv-container {
+        min-height: 30px;
+    }
 }

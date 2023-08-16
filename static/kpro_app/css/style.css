@@ -398,6 +398,11 @@ body {
     margin: 0 auto;
   }
 
+  #qr-canvas, .device_verify__scan-container {
+    width: 350px !important;
+    height: 350px !important;
+  }
+
   .kpro_web__qr-bg-container {
     width: 335px;
     height: 335px;
@@ -406,6 +411,7 @@ body {
     padding: 0;
     box-sizing: border-box;
   }
+
 
   .device_verify__scan-container {
     width: 450px;

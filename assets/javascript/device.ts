@@ -132,7 +132,7 @@ async function handleVerifyDevice() : Promise<void> {
   const encoder = new UREncoder(ur, maxFragmentLength);
   const decoder = new URDecoder();
   const html5QrCode = new Html5Qrcode("device_verify__qr-reader");
-  const config = {fps: 10, qrbox: 600, aspectRatio: 1};
+  const config = {fps: 10, qrbox: 600, aspectRatio: 1, videoConstraints: { facingMode: { exact: "environment" } }};
   QRUtils.generateQRPart(encoder, verifyQR, false, 400);
 
   next_btn.addEventListener("click", () => {
