@@ -209,9 +209,16 @@ body {
   box-sizing: border-box;
 }
 
+.kpro_web__version-container {
+  width: 450px;
+  margin: 0 auto 5em auto;
+  text-align: right;
+  font-weight: 700;
+}
+
 .kpro_web__db-container {
   width: 550px;
-  height: 650px;
+  height: 550px;
   margin: 5em auto 0 auto;
   text-align: center;
   position: relative;
@@ -384,11 +391,16 @@ body {
     padding: 6.5em 0;
   }
 
-  .kpro_web__db-container, .kpro_web__device-container {
+  .kpro_web__db-container, .kpro_web__device-container{
     width: 90%;
     margin: 0 auto;
     padding: 1em 0 0 0;
     box-sizing: border-box;
+  }
+
+  .kpro_web__version-container {
+    width: 330px;
+    margin: 0 auto 3em auto;
   }
 
   .kpro_web__db-qr, .kpro_web__device-qr, .kpro_web__btn-centered {

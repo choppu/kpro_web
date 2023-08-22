@@ -1,6 +1,6 @@
 import { QRUtils } from "./qr_utils";
 import {UR, UREncoder, URDecoder} from '@ngraveio/bc-ur'
-import {Html5Qrcode} from "html5-qrcode";
+import {Html5Qrcode, Html5QrcodeCameraScanConfig} from "html5-qrcode";
 
 
 
@@ -132,7 +132,7 @@ async function handleVerifyDevice() : Promise<void> {
   const encoder = new UREncoder(ur, maxFragmentLength);
   const decoder = new URDecoder();
   const html5QrCode = new Html5Qrcode("device_verify__qr-reader");
-  const config = {fps: 10, qrbox: 600, aspectRatio: 1, videoConstraints: { facingMode: { exact: "environment" } }};
+  const config = {fps: 10, qrbox: 600, aspectRatio: 1};
   QRUtils.generateQRPart(encoder, verifyQR, false, 400);
 
   next_btn.addEventListener("click", () => {
@@ -152,13 +152,18 @@ async function handleVerifyDevice() : Promise<void> {
     step2Container.classList.add('kpro_web__display-none');
     step3Container.classList.remove('kpro_web__display-none');
     html5QrCode.start(
-      cameraId,
+      { facingMode: { exact: "environment"} },
       config,
       async (decodedText) => await onScanSuccess(decodedText, challenge.value, decoder, csrftoken.value, html5QrCode),
       (errorMessage) => onScanFailure(errorMessage)
     )
     .catch((err) => {
-      console.log(err);
+      html5QrCode.start(
+      cameraId,
+      config,
+      async (decodedText) => await onScanSuccess(decodedText, challenge.value, decoder, csrftoken.value, html5QrCode),
+      (errorMessage) => onScanFailure(errorMessage)
+    )
     });
   });
 }

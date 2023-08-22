@@ -12,7 +12,8 @@ APP_TEMPLATE_DIR = TEMPLATE_DIR + '/kpro_app/'
 def index(request):
   db = DB.objects.last()
   context = {
-    "db_path": db.version + '/db.bin'
+    "db_path": db.version + '/db.bin',
+    "version": db.version
   }
 
   return render(request, APP_TEMPLATE_DIR + 'db.html', context)
