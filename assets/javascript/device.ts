@@ -1,6 +1,6 @@
 import { QRUtils } from "./qr_utils";
 import {UR, UREncoder, URDecoder} from '@ngraveio/bc-ur'
-import {Html5Qrcode, Html5QrcodeCameraScanConfig} from "html5-qrcode";
+import {Html5Qrcode} from "html5-qrcode";
 
 
 
@@ -60,6 +60,7 @@ function handleDeviceResponse(resp: Buffer, challenge: string) : FormData {
   const deviceId = (resp[2] as any).toString("hex");
   const deviceChallenge = (resp[6] as any).toString("hex");
   const signature = (resp[7] as any).toString("hex");
+  console.log(deviceId);
 
   reqData.append(keys[2], deviceId);
   reqData.append(keys[6], deviceChallenge);

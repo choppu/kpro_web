@@ -96,17 +96,18 @@ def verify(request):
     except:
       resp = {'status': 'error', 'message': 'Error: No device ' + device_id + ' found'}
 
-    if verify_signature(device_id, initial_challenge, signature, device.public_key):
-      mess = 'Success: Your device is genuine. This is not the first time the device was verified.'
+    if(device != None):
+      if verify_signature(device_id, initial_challenge, signature, device.public_key):
+        mess = 'Success: Your device is genuine. This is not the first time the device was verified.'
 
-      if (device.verification_start_date == None):
-        device.verification_start_date = datetime.datetime.utcnow()
-        mess = 'Success: First verification. Your device is genuine.'
-      device.success_counter = device.success_counter + 1
-      device.save()
+        if (device.verification_start_date == None):
+          device.verification_start_date = datetime.datetime.utcnow()
+          mess = 'Success: First verification. Your device is genuine.'
+        device.success_counter = device.success_counter + 1
+        device.save()
 
-      resp = success(device, challenge, mess)
-    else:
-      resp = {'status': 'error', 'message': 'Error: Invalid signature.'}
+        resp = success(device, challenge, mess)
+      else:
+        resp = {'status': 'error', 'message': 'Error: Invalid signature.'}
 
     return HttpResponse(json.dumps(resp), content_type='application/json')
