@@ -10,7 +10,7 @@ ERC20_MAGIC = 0x3020
 PAGE_SIZE = 8192
 WORD_SIZE = 16
 
-enc_key = os.environ['DB_ENCRYPTION_KEY']
+enc_key = os.environ['DB_SIGN_KEY']
 
 def serialize_addresses(addresses):
     res = b''

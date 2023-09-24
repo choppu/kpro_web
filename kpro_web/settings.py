@@ -31,7 +31,7 @@ env = Env()
 env.read_env()
 
 SECRET_KEY = env.str("SECRET_KEY")
-DB_ENCRYPTION_KEY = env.str("DB_ENCRYPTION_KEY")
+DB_SIGN_KEY = env.str("DB_SIGN_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -48,8 +48,10 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'pagedown.apps.PagedownConfig',
     'apps.db_updater',
     'apps.device_verifier',
+    'apps.firmware',
     "django_extensions"
 ]
 
@@ -81,8 +83,6 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'kpro_web.wsgi.application'
-
 
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
@@ -90,7 +90,7 @@ WSGI_APPLICATION = 'kpro_web.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'NAME': str(os.path.join(BASE_DIR, "db.sqlite3")),
     }
 }
 

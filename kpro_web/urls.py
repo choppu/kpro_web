@@ -26,4 +26,6 @@ urlpatterns = [
     path('', include("apps.db_updater.urls", namespace='default')),
     path('db/', include("apps.db_updater.urls")),
     path('verify/', include("apps.device_verifier.urls")),
+    path('firmware/', include("apps.firmware.urls")),
+    path('', include('pagedown.urls')),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
