@@ -1,17 +1,22 @@
+import json
+from django.http import HttpResponse
 from django.shortcuts import render
 from kpro_web.settings import TEMPLATE_DIR
 from .models import Firmware
 
-import secrets
-import os
-
 # Create your views here.
 APP_TEMPLATE_DIR = TEMPLATE_DIR + '/kpro_app/'
-enc_key = os.environ['DEVICE_VERIFICATION_ENC_KEY']
 
 def index(request):
-  context = {
+  return render(request, APP_TEMPLATE_DIR + 'firmware.html', context=None)
 
-  }
+def fw_context(request):
+  fw = Firmware.objects.last()
 
-  return render(request, APP_TEMPLATE_DIR + 'firmware.html', context)
+  fw_context = {
+    "fw_path": fw.version + '/firmware.bin',
+    "changelog_path": fw.version + '/changelog.md',
+    "version": fw.version
+    }
+
+  return HttpResponse(json.dumps(fw_context), content_type='application/json')

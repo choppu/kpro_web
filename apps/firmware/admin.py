@@ -6,11 +6,8 @@ from django.db import IntegrityError, transaction
 from django.contrib import messages
 
 from .models import Firmware
-from .utils import makedirs
-
-def upload_file(file, output, write_type, enc):
-        with open(output, write_type, encoding=enc) as f:
-           f.write(file)
+from common.utils import makedirs
+from .firmware import upload_file, delete_fw
 
 class FirmwareForm(forms.ModelForm):
     firmware = forms.FileField()
@@ -28,26 +25,6 @@ class FirmwareForm(forms.ModelForm):
 class FirmwareAdmin(admin.ModelAdmin):
     form = FirmwareForm
 
-    def save_model(self, request, obj, form, change):
-        form_data = form.cleaned_data
-        fw = form_data["firmware"].file.getvalue()
-        chl = form_data["changelog"]
-        output_dir = 'uploads/' + form_data["version"]
-
-        makedirs(output_dir)
-
-        fw_output = output_dir + '/firmware.bin'
-        changelog_output = output_dir + '/changelog.md'
-
-        upload_file(fw, fw_output, "wb", None)
-        upload_file(chl, changelog_output, "w", "utf-8")
-
-        try:
-          with transaction.atomic():
-            super().save_model(request, obj, form, change)
-        except IntegrityError as e:
-            print(e)
-
     def get_form(self, request, obj, **kwargs):
         form = super(FirmwareAdmin, self).get_form(request, obj, **kwargs)
 
@@ -56,11 +33,13 @@ class FirmwareAdmin(admin.ModelAdmin):
             chl_p = 'uploads/' + fw_version + '/changelog.md'
 
             form.base_fields['version'].disabled = True
+            form.base_fields['firmware'].required = False
 
             with open(chl_p, encoding="utf-8") as f:
               form.base_fields['changelog'].initial = f.read()
         else:
             form.base_fields['changelog'].initial = ""
+            form.base_fields['firmware'].required = True
 
 
         return form
@@ -68,10 +47,35 @@ class FirmwareAdmin(admin.ModelAdmin):
     def get_fields(self, request, obj=None):
         fields = super(FirmwareAdmin, self).get_fields(request, obj)
         fields_list = list(fields)
+
         if obj:
             fields_list.remove('firmware')
+
         fields_tuple = tuple(fields_list)
         return fields_tuple
+
+    def save_model(self, request, obj, form, change):
+        form_data = form.cleaned_data
+        fw = form_data["firmware"]
+        chl = form_data["changelog"]
+        output_dir = 'uploads/' + form_data["version"]
+
+        makedirs(output_dir)
+
+        changelog_output = output_dir + '/changelog.md'
+        upload_file(chl, changelog_output, "w", "utf-8")
+
+        if fw:
+            fw_file = fw.file.getvalue()
+            fw_output = output_dir + '/firmware.bin'
+            upload_file(fw_file, fw_output, "wb", None)
+
+        try:
+          with transaction.atomic():
+            super().save_model(request, obj, form, change)
+        except IntegrityError as e:
+            delete_fw(form_data["version"])
+            print(e)
 
     def render_change_form(self, request, context, add=True, change=True, form_url='', obj=None):
         context.update({
@@ -79,6 +83,17 @@ class FirmwareAdmin(admin.ModelAdmin):
             'show_save_and_add_another': False
         })
         return super().render_change_form(request, context, add, change, form_url, obj)
+
+    def delete_model(self, request, obj):
+        print("Hello2")
+        delete_fw(obj.version)
+        super().delete_model(request, obj)
+
+    def delete_queryset(self, request, queryset):
+        with transaction.atomic():
+           for obj in queryset:
+               delete_fw(obj.version)
+        return super().delete_queryset(request, queryset)
 
 
 admin.site.register(Firmware, FirmwareAdmin)

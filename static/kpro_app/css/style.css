@@ -186,14 +186,14 @@ body {
   float: right;
   text-align: right;
   padding: 1.5em 0;
-  width: 35%;
+  width: 45%;
   border-bottom: white solid 2px;
   box-sizing: border-box;
 }
 
 .kpro_web__menu-element {
   display: inline-block;
-  width: 35%;
+  width: 30%;
 }
 
 .kpro_web__menu-element-link:hover, .active {
@@ -286,6 +286,7 @@ body {
 .kpro_web__qr-bg-container {
   width: 430px;
   height: 430px;
+  box-shadow: 0 3px 3px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
   margin: 1.2em auto;
   background: white;
   padding: 3% 0;
@@ -315,6 +316,7 @@ body {
   font-family: 'Chivo Mono', cursive;
   border: none;
   color: rgb(22, 22, 35);
+  cursor: pointer;
   display: inline-block;
   font-size: 1.2em;
   text-transform: uppercase;
@@ -332,13 +334,14 @@ body {
 .kpro_web__btn-centered {
   width: 450px;
   height: 450px;
-  background: rgb(51, 50, 55);
+  background: rgb(51, 40, 55);
   margin: 4em auto 1em auto;
   box-sizing: border-box;
   display: block;
-  border-radius: 30px;
+  border-radius: 15px;
   padding: 11em 0;
   box-sizing: border-box;
+  box-shadow: 0 3px 3px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
 }
 
 .kpro_web__btn-container-icon {
@@ -363,18 +366,95 @@ body {
   box-sizing: border-box;
 }
 
+.kpro_web__fw-heading-container {
+  width: 90%;
+  margin: 3em auto;
+  text-align: center;
+}
+
+.kpro_web__fw-heading {
+  font-weight: 600;
+  font-size: 2.2em;
+  margin: 1em 0;
+  display: inline-block;
+}
+
+.kpro_web__fw-text {
+  font-weight: 200;
+  font-size: 1.5em;
+  margin: 1em 0 2em 0;
+  display: block;
+}
+
+.kpro_web__fw-container {
+  width: 90%;
+  text-align: center;
+  margin: 3em auto;
+}
+
+.kpro_web__fw-btn-icon {
+  font-size: 20px !important;
+  vertical-align: top;
+}
+
+.kpro_web__fw-load-progress-bar-container {
+  width: 50%;
+  margin: 3em auto 2em auto;
+}
+
+#progress-bar {
+  width: 100%;
+}
+
+progress {
+  border-radius: 5px;
+  height: 5px;
+  background: white;
+}
+
+progress::-webkit-progress-bar {
+  border-radius: 5px;
+  height: 5px;
+  background: white;
+}
+
+progress::-webkit-progress-value {
+  background: rgb(230, 222, 75);
+  border-radius: 5px;
+}
+
+progress::-moz-progress-bar {
+  background: white;
+}
+
+progress::-moz-progress-value {
+  background: rgb(230, 222, 75);
+  border-radius: 5px;
+}
+
 @media screen and (max-width: 570px) {
   .kpro_web__menu {
-    width: 38%;
+    width: 50%;
   }
 
   .kpro_web__menu-container {
     margin-bottom: 1.5em;
   }
 
+  .kpro_web__menu-element {
+    display: block;
+    background: white;
+    width: 90%;
+    color: rgb(22, 22, 35);
+    padding: .5em;
+    box-sizing: border-box;
+    margin-bottom: .7em;
+    float: right;
+  }
+
   .kpro_web__logo {
     font-size: 1.2em;
-    width: 60%;
+    width: 40%;
   }
 
   .kpro_web__verify-step {

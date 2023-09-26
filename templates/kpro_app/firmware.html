@@ -1,1 +1,20 @@
-<p>Hello</p>
+{% extends './base.html' %}
+{% load static %}
+{% block content %}
+<input type="hidden" id="media-prefix" name="fw-path" value="{% get_media_prefix %}">
+<div class="kpro_web__fw-heading-container">
+  <h1 class="kpro_web__fw-heading">Download Keycard Pro</h1>
+  <p class="kpro_web__fw-text">Connect your Keycard Pro device and download the latest version of Keycard Pro</p>
+</div>
+<div class="kpro_web__fw-container">
+  <button class="kpro_web__btn group" id="btn-fw-update">
+    <span class="material-icons-sharp kpro_web__fw-btn-icon" id="fw-icon">system_update</span>
+    <span class="kpro_web__fw-btn-label">Update Firmware</span>
+    </button>
+    <div id="fw-progress" class="kpro_web__fw-load-progress-bar-container kpro_web__display-none">
+      <progress id="progress-bar" value="0"></progress>
+    </div>
+</div>
+<div class="kpro_web__release-notes-container" id="fw-release-notes"></div>
+<script src="{% static '/kpro_app/js/firmware.js' %}"></script>
+{% endblock %}

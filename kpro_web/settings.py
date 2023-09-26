@@ -36,7 +36,7 @@ DB_SIGN_KEY = env.str("DB_SIGN_KEY")
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['192.168.1.68', '127.0.0.1', 'bitgamma.hopto.org', 'ksenia.bitgamma.com', 'localhost']
+ALLOWED_HOSTS = ['192.168.1.68', '127.0.0.1', 'bitgamma.hopto.org', 'ksenia.bitgamma.com', 'localhost', '172.16.80.18']
 
 
 # Application definition

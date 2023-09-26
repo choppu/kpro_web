@@ -14,7 +14,7 @@ import os
 
 # Create your views here.
 APP_TEMPLATE_DIR = TEMPLATE_DIR + '/kpro_app/'
-enc_key = os.environ['DEVICE_VERIFICATION_ENC_KEY']
+enc_key = os.environ['DEVICE_VERIFICATION_SIGN_KEY']
 
 state = {
   "dev_auth_init": 1,

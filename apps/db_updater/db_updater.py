@@ -1,6 +1,6 @@
 import itertools
 import json
-from .utils import makedirs, deletedirs, zip_db_files
+from common.utils import makedirs, deletedirs, zip_db_files
 from .token_db import generate_token_bin_file
 from urllib.request import urlopen
 from pathlib import Path
