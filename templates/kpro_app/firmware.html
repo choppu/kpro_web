@@ -18,12 +18,15 @@
 <div class="kpro_web__release-notes-container">
   <h1 class="kpro_web__release-notes-heading kpro_web__fw-heading">Release notes</h1>
   <div class="kpro_web__release-notes" id="fw-release-notes">
-    <div class="kpro_web__release-note">
+    <div class="kpro_web__release-note" id="release-note-container">
       <h2 class="kpro_web__release-note-heading" id="release-note-fw-version"></h2>
       <div class="kpro_web__release-note-text" id="release-note-fw-changelog"></div>
-      <button id="release-note-read-more-btn" class="kpro_web__read-more"><span class="material-icons-sharp">keyboard_double_arrow_down</span></button>
+      <button id="release-note-read-more-btn" class="kpro_web__read-more"><span class="material-icons-sharp" id="release-note-read-more-btn-ic">keyboard_double_arrow_down</span></button>
     </div>
   </div>
+</div>
+<div class="kpro_web__msg-container">
+  <span id="kpro-web-msg" class="kpro_web__display-none kpro_web__msg"></span>
 </div>
 <script src="{% static '/kpro_app/js/firmware.js' %}"></script>
 {% endblock %}

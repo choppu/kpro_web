@@ -267,10 +267,6 @@ body {
   box-sizing: border-box;
 }
 
-.kpro_web__display-none {
-  display: none;
-}
-
 .kpro_web__device-container {
   width: 90%;
   margin: 4em auto;
@@ -445,22 +441,24 @@ progress::-moz-progress-value {
   box-sizing: border-box;
   text-align: left;
   line-height: 1.7em;
-  height: 100%;
+  height: 360px;
   position: relative;
+  overflow-y: hidden;
+  transition: height .5s ease-out;
   box-shadow: 0 3px 3px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
 }
 
 .kpro_web__release-note-heading {
   font-weight: 500;
   font-size: 1.3em;
-  padding-bottom: 1em;
+  padding-bottom: 1.3em;
   width: 80%;
   border-bottom: solid 2px rgb(22, 22, 35);
 }
 
 .kpro_web__release-note-text {
   font-size: 1.05em;
-  padding-top: 2em;
+  padding-top: 1em;
 }
 
 .kpro_web__read-more {
@@ -475,8 +473,43 @@ progress::-moz-progress-value {
   border: none;
 }
 
-#release-note-fw-changelog > h1, #release-note-fw-changelog > h2, #release-note-fw-changelog > ul, #release-note-fw-changelog > li, #release-note-fw-changelog > ol {
+#release-note-fw-changelog > h1, #release-note-fw-changelog > h2, #release-note-fw-changelog > ul, #release-note-fw-changelog > li, #release-note-fw-changelog > ol,
+#release-note-fw-changelog > h3, #release-note-fw-changelog > a, #release-note-fw-changelog > a:hover, #release-note-fw-changelog > blockquote,
+#release-note-fw-changelog > pre, #release-note-fw-changelog > code, #release-note-fw-changelog > table, #release-note-fw-changelog > tr, #release-note-fw-changelog > th,
+#release-note-fw-changelog > td {
   all: revert;
+}
+
+.kpro_web__msg-container {
+  width: 90%;
+  margin: 2em auto;
+  text-align: center;
+}
+
+.kpro_web__msg {
+  background: white;
+  display: inline-block;
+  color: rgb(22, 22, 35);
+  text-align: left;
+  padding: .5em 1em;
+  box-sizing: border-box;
+  border-bottom: solid 1px rgb(22, 22, 35);
+}
+
+
+#release-note-fw-changelog > pre {
+  background: rgb(245, 245, 245);
+  padding: 1em;
+  box-sizing: border-box;
+  color: rgb(80, 80, 80)
+}
+
+#release-note-fw-changelog > a {
+  border-bottom: solid 1px rgb(22, 22, 35);
+}
+
+.kpro_web__display-none {
+  display: none;
 }
 
 @media screen and (max-width: 570px) {

@@ -1,7 +1,7 @@
 from common.utils import deletedirs
 
-def upload_file(file, output, write_type, enc):
-        with open(output, write_type, encoding=enc) as f:
+def upload_file(file, output, write_type, enc, nl):
+        with open(output, write_type, encoding=enc, newline=nl) as f:
            f.write(file)
 
 def delete_fw(fw_version):

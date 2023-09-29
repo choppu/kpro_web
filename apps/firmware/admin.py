@@ -63,12 +63,12 @@ class FirmwareAdmin(admin.ModelAdmin):
         makedirs(output_dir)
 
         changelog_output = output_dir + '/changelog.md'
-        upload_file(chl, changelog_output, "w", "utf-8")
+        upload_file(chl, changelog_output, "w", "utf-8", "\n")
 
         if fw:
             fw_file = fw.file.getvalue()
             fw_output = output_dir + '/firmware.bin'
-            upload_file(fw_file, fw_output, "wb", None)
+            upload_file(fw_file, fw_output, "wb", None, None)
 
         try:
           with transaction.atomic():
