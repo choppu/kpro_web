@@ -76,8 +76,11 @@ async function handleFirmwareUpdate() : Promise<void> {
         handleMessageLog(logMessage, "Keycard Pro updated successfully");
       }
     } catch (e) {
-      console.log(e)
-      handleMessageLog(logMessage, "Error: Failed to update the firmware");
+      if (e instanceof KProJS.KProError.TransportOpenUserCancelled) {
+        handleMessageLog(logMessage, "Error connecting to device. Check if Keycard Pro is connected");
+      } else {
+        handleMessageLog(logMessage, "Error: Failed to update the firmware");
+      }
       progressBar.classList.add("kpro_web__display-none");
     }
   });

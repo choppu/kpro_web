@@ -624,4 +624,13 @@ progress::-moz-progress-value {
     margin: 0 auto;
     text-align: right;
   }
+
+  .kpro_web__fw-heading {
+    margin: 0 0 1em 0;
+  }
+
+  .kpro_web__release-note {
+    width: 90%;
+    margin: 1em auto;
+  }
 }
