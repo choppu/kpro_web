@@ -211,7 +211,7 @@ body {
 
 .kpro_web__version-container {
   width: 450px;
-  margin: 0 auto 5em auto;
+  margin: 0 auto 3.5em auto;
   text-align: right;
   font-weight: 700;
 }
@@ -246,9 +246,23 @@ body {
   outline-offset: calc(var(--g)/-1);
 }
 
+.db_updater__top-label-container {
+  font-size: 2em;
+  padding: 1.5em 0 0 0;
+  box-sizing: border-box;
+  text-align: center;
+}
+
 .db_updater__label-container {
   font-size: 2em;
-  padding: 0 0 2.5em 0;
+  padding: 0 0 1.5em 0;
+  box-sizing: border-box;
+  text-align: center;
+}
+
+.db_updater__btn-container {
+  width: 90%;
+  margin: 0 auto 3.5em auto;
   text-align: center;
 }
 
@@ -334,7 +348,6 @@ body {
   margin: 4em auto 1em auto;
   box-sizing: border-box;
   display: block;
-  border-radius: 15px;
   padding: 11em 0;
   box-sizing: border-box;
   box-shadow: 0 3px 3px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
@@ -381,6 +394,7 @@ body {
 
 .kpro_web__fw-text {
   font-weight: 200;
+  line-height: 1.4em;
   font-size: 1.5em;
   margin: 1em 0 2em 0;
   display: block;
@@ -560,7 +574,7 @@ progress::-moz-progress-value {
 
   .kpro_web__version-container {
     width: 330px;
-    margin: 0 auto 3em auto;
+    margin: 0 auto 2em auto;
   }
 
   .kpro_web__db-qr, .kpro_web__device-qr, .kpro_web__btn-centered {
@@ -614,9 +628,13 @@ progress::-moz-progress-value {
     outline-offset: calc(-1*var(--t));
   }
 
-  .db_updater__label-container {
+  .db_updater__label-container, .db_updater__top-label-container {
     font-size: 1.4em;
     line-height: 1.4em;
+  }
+
+  .db_updater__top-label-container {
+    padding: .5em 0 1em 0;
   }
 
   .kpro__web_footer-container {

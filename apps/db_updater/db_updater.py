@@ -32,7 +32,7 @@ class DBUpdate:
     upload_db_file(self.erc20_url, erc20_out_path)
     upload_db_file(self.chain_url, chain_out_path)
 
-    file_hash = generate_token_bin_file(erc20_out_path, chain_out_path, bin_output, False)
+    file_hash = generate_token_bin_file(erc20_out_path, chain_out_path, bin_output, int(self.db_version), False)
     zip_db_files(Path(p), Path(zip_path))
 
     return file_hash

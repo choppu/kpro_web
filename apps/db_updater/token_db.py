@@ -6,11 +6,13 @@ import hashlib
 
 CHAIN_MAGIC = 0x4348
 ERC20_MAGIC = 0x3020
+VERSION_MAGIC = 0x4532
 
 PAGE_SIZE = 8192
 WORD_SIZE = 16
 
 enc_key = os.environ['DB_SIGN_KEY']
+version_len = 0x0004
 
 def serialize_addresses(addresses):
     res = b''
@@ -58,9 +60,11 @@ def pad_write(f, m, buf, page_limit):
         m.update(0xff.to_bytes(1))
         size = size + 1
 
-def serialize_db(f, m, page_align, chains, tokens):
+def serialize_db(f, m, page_align, chains, tokens, ver):
     page_limit = PAGE_SIZE if page_align else 0xffffffff
     buf = b''
+
+    buf = ver
 
     for chain in chains.values():
         serialized_chain = serialize_chain(chain)
@@ -122,7 +126,7 @@ def sign(m):
     sig = key.ecdsa_sign(m, raw=True)
     return key.ecdsa_serialize_compact(sig)
 
-def generate_token_bin_file(token_list, chain_list, output, page_align):
+def generate_token_bin_file(token_list, chain_list, output, db_version, page_align):
     token_list = json.load(open(token_list))
     chain_list = json.load(open(chain_list))
     m = hashlib.sha256()
@@ -130,11 +134,13 @@ def generate_token_bin_file(token_list, chain_list, output, page_align):
     tokens = {}
     chains = {}
 
+    ver = struct.pack("<HHI", VERSION_MAGIC, version_len, db_version)
+
     for token in token_list["tokens"]:
         process_token(tokens, chains, token, chain_list)
 
     with open(output, 'wb') as f:
-        serialize_db(f, m, page_align, chains, tokens)
+        serialize_db(f, m, page_align, chains, tokens, ver)
         m_hash = m.digest()
         signature = sign(m_hash)
         f.write(signature)

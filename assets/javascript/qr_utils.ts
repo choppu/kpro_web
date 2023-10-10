@@ -22,7 +22,6 @@ export namespace QRUtils {
 
   export function generateQRPart(encoder: UREncoder, qrCanv: any, timeout: boolean, size: number) : void {
     let part = encoder.nextPart();
-    console.log(part);
     displayQRPart(part.toUpperCase(), qrCanv, size);
 
     if(timeout) {

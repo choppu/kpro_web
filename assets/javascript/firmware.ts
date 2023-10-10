@@ -1,32 +1,13 @@
 import KProJS from "kprojs";
 import TransportWebHID from "kprojs-web-hid";
+import Eth from "kprojs/lib/eth";
+import Transport from "kprojs/lib/transport";
 import { marked } from 'marked';
+import { UIUtils } from "./ui_utils";
 
 if (!('process' in window)) {
   // @ts-ignore
   window.process = {}
-}
-
-function handleFWLoadProgress(transport: any, loadBar: HTMLProgressElement) : void {
-  let fwI = 0;
-  if (fwI == 0) {
-    fwI = 1;
-    let pBarProgress = 0;
-    transport.on("chunk-loaded", (progress: any) => {
-      if (progress >= loadBar.max) {
-        transport.off("chunk-loaded");
-        i = 0;
-      } else {
-        pBarProgress += progress
-        loadBar.value = pBarProgress;
-      }
-    })
-  }
-}
-
-function handleMessageLog(msgField: HTMLSpanElement, msg: string) : void {
-  msgField.innerHTML = msg;
-  msgField.classList.contains("kpro_web__display-none") && msg != "" ? msgField.classList.remove("kpro_web__display-none") : msgField.classList.add("kpro_web__display-none");
 }
 
 async function handleFirmwareUpdate() : Promise<void> {
@@ -42,7 +23,7 @@ async function handleFirmwareUpdate() : Promise<void> {
   const releaseNotesContainer = document.getElementById("release-note-container") as HTMLDivElement;
   const logMessage = document.getElementById("kpro-web-msg") as HTMLSpanElement;
 
-  handleMessageLog(logMessage, "");
+  UIUtils.handleMessageLog(logMessage, "");
 
   const context = await fetch("./context").then((r) => r.json());
 
@@ -54,8 +35,8 @@ async function handleFirmwareUpdate() : Promise<void> {
   fwChangelogLabel.innerHTML = "Version " + context["version"];
   fwChangelogText.innerHTML = marked.parse(changelog);
 
-  let transport: any;
-  let appEth: any;
+  let transport: Transport;
+  let appEth: Eth;
 
   updateFirmwareBtn.addEventListener("click", async () => {
     try {
@@ -64,22 +45,22 @@ async function handleFirmwareUpdate() : Promise<void> {
       let { fwVersion } = await appEth.getAppConfiguration();
 
       if (fwVersion == context["version"]) {
-        handleMessageLog(logMessage, "You already have the latest version of the firmware");
+        UIUtils.handleMessageLog(logMessage, "You already have the latest version of the firmware");
       } else {
         progressBar.classList.remove("kpro_web__display-none");
-        handleFWLoadProgress(transport, fwLoad);
+        UIUtils.handleFWLoadProgress(transport, fwLoad);
 
         await appEth.loadFirmware(fw);
         await transport.close();
 
         progressBar.classList.add("kpro_web__display-none");
-        handleMessageLog(logMessage, "Keycard Pro updated successfully");
+        UIUtils.handleMessageLog(logMessage, "Keycard Pro updated successfully");
       }
     } catch (e) {
       if (e instanceof KProJS.KProError.TransportOpenUserCancelled) {
-        handleMessageLog(logMessage, "Error connecting to device. Check if Keycard Pro is connected");
+        UIUtils.handleMessageLog(logMessage, "Error connecting to device. Check if Keycard Pro is connected");
       } else {
-        handleMessageLog(logMessage, "Error: Failed to update the firmware");
+        UIUtils.handleMessageLog(logMessage, "Error: Failed to update the firmware");
       }
       progressBar.classList.add("kpro_web__display-none");
     }

@@ -1,17 +1,32 @@
 {% extends './base.html' %}
 {% load static %}
 {% block content %}
-<input type="hidden" id="db_updater__db-version" name="custId" value="{% get_media_prefix %}{{ db_path }}">
+<input type="hidden" id="db_updater__media-prefix" name="db_updater__media-prefix" value="{% get_media_prefix %}">
+<div class="db_updater__top-label-container">
+  <h1 class="db_updater__label">Scan QR...</h1>
+ </div>
 <div class="kpro_web__db-container">
   <div class="kpro_web__db-qr-container">
     <canvas id="qr" class="kpro_web__db-qr"></canvas>
   </div>
 </div>
 <div class="kpro_web__version-container">
-  <span class="kpro_web__version">DB version {{ version }}</span>
+  <span class="kpro_web__version" id="db-version-label"></span>
 </div>
 <div class="db_updater__label-container">
-  <h1 class="db_updater__label">Scan QR to update ERC20 &amp; Chain Database</h1>
+  <h1 class="db_updater__label">...or connect your Keycard Pro to update ERC20 &amp; Chain Database</h1>
+ </div>
+ <div class="db_updater__btn-container">
+  <button class="kpro_web__btn group" id="btn-db-usb-update">
+    <span class="material-icons-sharp kpro_web__fw-btn-icon" id="fw-icon">usb</span>
+    <span class="kpro_web__fw-btn-label">Update ERC20 Database</span>
+    </button>
+    <div id="db-progress" class="kpro_web__fw-load-progress-bar-container kpro_web__display-none">
+      <progress id="db-progress-bar" value="0"></progress>
+    </div>
+    <div class="kpro_web__msg-container">
+      <span id="kpro-db-web-msg" class="kpro_web__display-none kpro_web__msg"></span>
+    </div>
  </div>
 <script src="{% static '/kpro_app/js/token_db.js' %}"></script>
 {% endblock %}

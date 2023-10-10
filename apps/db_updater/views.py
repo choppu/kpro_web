@@ -1,3 +1,4 @@
+import json
 from django.shortcuts import render
 from kpro_web.settings import TEMPLATE_DIR
 from .models import DB
@@ -10,13 +11,17 @@ APP_TEMPLATE_DIR = TEMPLATE_DIR + '/kpro_app/'
 # Create your views here.
 
 def index(request):
+  return render(request, APP_TEMPLATE_DIR + 'db.html')
+
+def db_context(request):
   db = DB.objects.last()
+
   context = {
     "db_path": db.version + '/db.bin',
     "version": db.version
   }
 
-  return render(request, APP_TEMPLATE_DIR + 'db.html', context)
+  return HttpResponse(json.dumps(context), content_type='application/json')
 
 @require_GET
 def security_txt(request):
