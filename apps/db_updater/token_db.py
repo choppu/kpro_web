@@ -12,7 +12,6 @@ PAGE_SIZE = 8192
 WORD_SIZE = 16
 
 enc_key = os.environ['DB_SIGN_KEY']
-version_len = 0x0004
 
 def serialize_addresses(addresses):
     res = b''
@@ -60,11 +59,9 @@ def pad_write(f, m, buf, page_limit):
         m.update(0xff.to_bytes(1))
         size = size + 1
 
-def serialize_db(f, m, page_align, chains, tokens, ver):
+def serialize_db(f, m, page_align, chains, tokens, db_version):
     page_limit = PAGE_SIZE if page_align else 0xffffffff
-    buf = b''
-
-    buf = ver
+    buf = struct.pack("<HHI", VERSION_MAGIC, 4, db_version)
 
     for chain in chains.values():
         serialized_chain = serialize_chain(chain)
@@ -134,13 +131,11 @@ def generate_token_bin_file(token_list, chain_list, output, db_version, page_ali
     tokens = {}
     chains = {}
 
-    ver = struct.pack("<HHI", VERSION_MAGIC, version_len, db_version)
-
     for token in token_list["tokens"]:
         process_token(tokens, chains, token, chain_list)
 
     with open(output, 'wb') as f:
-        serialize_db(f, m, page_align, chains, tokens, ver)
+        serialize_db(f, m, page_align, chains, tokens, db_version)
         m_hash = m.digest()
         signature = sign(m_hash)
         f.write(signature)

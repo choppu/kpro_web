@@ -1,7 +1,7 @@
 import KProJS from "kprojs";
 import TransportWebHID from "kprojs-web-hid";
 import Eth from "kprojs/lib/eth";
-import Transport from "kprojs/lib/transport";
+import Transport, { StatusCodes } from "kprojs/lib/transport";
 import { marked } from 'marked';
 import { UIUtils } from "./ui_utils";
 
@@ -60,7 +60,8 @@ async function handleFirmwareUpdate() : Promise<void> {
       if (e instanceof KProJS.KProError.TransportOpenUserCancelled) {
         UIUtils.handleMessageLog(logMessage, "Error connecting to device. Check if Keycard Pro is connected");
       } else {
-        UIUtils.handleMessageLog(logMessage, "Error: Failed to update the firmware");
+        let m = (e.statusCode == StatusCodes.SECURITY_STATUS_NOT_SATISFIED) ? "Firmware update canceled by user" :  "Error: Failed to update the firmware";
+        UIUtils.handleMessageLog(logMessage, m);
       }
       progressBar.classList.add("kpro_web__display-none");
     }

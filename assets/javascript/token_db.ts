@@ -2,7 +2,7 @@ import {UR, UREncoder} from '@ngraveio/bc-ur'
 import { QRUtils } from "./qr_utils";
 import KProJS from "kprojs";
 import TransportWebHID from "kprojs-web-hid";
-import Transport from 'kprojs/lib/transport';
+import Transport, { StatusCodes } from 'kprojs/lib/transport';
 import Eth from 'kprojs/lib/eth';
 import { UIUtils } from './ui_utils';
 
@@ -62,7 +62,8 @@ async function generateDBQR() : Promise<void> {
       if (e instanceof KProJS.KProError.TransportOpenUserCancelled) {
         UIUtils.handleMessageLog(logMessage, "Error connecting to device. Check if Keycard Pro is connected");
       } else {
-        UIUtils.handleMessageLog(logMessage, "Error: Failed to update the ERC20 database");
+       let m = (e.statusCode == StatusCodes.SECURITY_STATUS_NOT_SATISFIED) ? "ERC20 database update canceled by user" :  "Error: Failed to update the ERC20 database";
+       UIUtils.handleMessageLog(logMessage, m)
       }
       progressBar.classList.add("kpro_web__display-none");
     }
