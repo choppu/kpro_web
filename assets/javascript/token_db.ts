@@ -62,7 +62,7 @@ async function generateDBQR() : Promise<void> {
       if (e instanceof KProJS.KProError.TransportOpenUserCancelled) {
         UIUtils.handleMessageLog(logMessage, "Error connecting to device. Check if Keycard Pro is connected");
       } else {
-       let m = (e.statusCode == StatusCodes.SECURITY_STATUS_NOT_SATISFIED) ? "ERC20 database update canceled by user" :  "Error: Failed to update the ERC20 database";
+       let m = (e.statusCode == StatusCodes.SECURITY_STATUS_NOT_SATISFIED) ? "ERC20 database update canceled by user" :  "Error: Invalid data. Failed to update the ERC20 database";
        UIUtils.handleMessageLog(logMessage, m)
       }
       progressBar.classList.add("kpro_web__display-none");
