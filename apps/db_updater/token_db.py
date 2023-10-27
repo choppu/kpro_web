@@ -1,8 +1,8 @@
 import json
-import os
 import struct
-from secp256k1Crypto import PrivateKey
 import hashlib
+
+from common.utils import sign
 
 CHAIN_MAGIC = 0x4348
 ERC20_MAGIC = 0x3020
@@ -10,8 +10,6 @@ VERSION_MAGIC = 0x4532
 
 PAGE_SIZE = 8192
 WORD_SIZE = 16
-
-enc_key = os.environ['DB_SIGN_KEY']
 
 def serialize_addresses(addresses):
     res = b''
@@ -117,11 +115,6 @@ def process_token(tokens, chains, token_json, chains_json):
         tokens[symbol] = token
 
     token["addresses"][chain_id] = token_json["address"]
-
-def sign(m):
-    key = PrivateKey(bytes(bytearray.fromhex(enc_key)), raw=True)
-    sig = key.ecdsa_sign(m, raw=True)
-    return key.ecdsa_serialize_compact(sig)
 
 def generate_token_bin_file(token_list, chain_list, output, db_version, page_align):
     token_list = json.load(open(token_list))

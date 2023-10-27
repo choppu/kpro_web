@@ -6,12 +6,15 @@ from django.db import IntegrityError, transaction
 from django.contrib import messages
 from django.utils.html import format_html
 from django.conf import settings
+from common.utils import iter_query
 
 
 # Register your models here.
 
 from .models import DB
 from .db_updater import DBUpdate
+
+DELTA_DBS = 200
 
 class UpdateDBForm(forms.ModelForm):
     class Meta:
@@ -55,7 +58,9 @@ class UpdateDBAdmin(admin.ModelAdmin):
 
     def save_model(self, request, obj, form, change):
         d = form.cleaned_data
-        db = DBUpdate(erc20_url = d.get('erc20_url'), chain_url = d.get('chain_url'), db_version = d.get('version'))
+        dbs_query = DB.objects.all().order_by('-version')[:DELTA_DBS]
+        prev_dbs = iter_query(dbs_query, "version")
+        db = DBUpdate(erc20_url = d.get('erc20_url'), chain_url = d.get('chain_url'), db_version = d.get('version'), prev_dbs = prev_dbs)
         f_hash = db.upload_db()
         obj.db_hash = f_hash
 

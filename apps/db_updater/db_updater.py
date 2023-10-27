@@ -2,6 +2,7 @@ import itertools
 import json
 from common.utils import makedirs, deletedirs, zip_db_files
 from .token_db import generate_token_bin_file
+from .db_delta import generate_db_deltas
 from urllib.request import urlopen
 from pathlib import Path
 
@@ -14,15 +15,19 @@ def upload_db_file(r_path, w_path):
 class DBUpdate:
   element_id = itertools.count()
 
-  def __init__(self, erc20_url, chain_url, db_version):
+  def __init__(self, erc20_url, chain_url, db_version, prev_dbs):
     self.id = next(self.element_id)
     self.erc20_url = str(erc20_url)
     self.chain_url = str(chain_url)
     self.db_version = str(db_version)
+    self.dbs = prev_dbs
 
   def upload_db(self):
     p = 'uploads/' + self.db_version
     makedirs(p)
+
+    delta_out_path = p + '/deltas'
+    makedirs(delta_out_path)
 
     erc20_out_path = p + '/erc20.json'
     chain_out_path = p + '/chain.json'
@@ -31,8 +36,8 @@ class DBUpdate:
 
     upload_db_file(self.erc20_url, erc20_out_path)
     upload_db_file(self.chain_url, chain_out_path)
-
     file_hash = generate_token_bin_file(erc20_out_path, chain_out_path, bin_output, int(self.db_version), False)
+    generate_db_deltas(self.db_version, self.dbs, delta_out_path)
     zip_db_files(Path(p), Path(zip_path))
 
     return file_hash
