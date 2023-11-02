@@ -3,18 +3,21 @@
 {% block content %}
 <input type="hidden" id="db_updater__media-prefix" name="db_updater__media-prefix" value="{% get_media_prefix %}">
 <div class="db_updater__top-label-container">
-  <h1 class="db_updater__label">Scan QR...</h1>
+  <h1 class="db_updater__label">Insert your current ERC20 database version &amp; scan QR to get the latest available delta...</h1>
  </div>
-<div class="kpro_web__db-container">
+ <div class="kpro_web__delta-container">
+
+</div>
+<div class="kpro_web__db-container kpro_web__display-none">
   <div class="kpro_web__db-qr-container">
     <canvas id="qr" class="kpro_web__db-qr"></canvas>
   </div>
 </div>
-<div class="kpro_web__version-container">
+<div class="kpro_web__version-container kpro_web__display-none">
   <span class="kpro_web__version" id="db-version-label"></span>
 </div>
 <div class="db_updater__label-container">
-  <h1 class="db_updater__label">...or connect your Keycard Pro to update ERC20 &amp; Chain Database</h1>
+  <h1 class="db_updater__label">...or connect your Keycard Pro to update ERC20 &amp; Chain database</h1>
  </div>
  <div class="db_updater__btn-container">
   <button class="kpro_web__btn group" id="btn-db-usb-update">

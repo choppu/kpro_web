@@ -7,6 +7,7 @@ from django.http import HttpResponse
 
 
 APP_TEMPLATE_DIR = TEMPLATE_DIR + '/kpro_app/'
+DELTA_DBS = 500
 
 # Create your views here.
 
@@ -15,10 +16,12 @@ def index(request):
 
 def db_context(request):
   db = DB.objects.last()
+  dbs_query = DB.objects.all().order_by('-version')[1:DELTA_DBS]
 
   context = {
     "db_path": db.version + '/db.bin',
-    "version": db.version
+    "version": db.version,
+    "available_db_versions": dbs_query
   }
 
   return HttpResponse(json.dumps(context), content_type='application/json')

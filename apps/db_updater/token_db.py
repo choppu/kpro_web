@@ -13,7 +13,7 @@ WORD_SIZE = 16
 
 def serialize_addresses(addresses):
     res = b''
-    for id, address in addresses.items():
+    for id, address in sorted(addresses.items()):
         if len(address) != 42:
             assert "Unexpected address format"
         res = res + struct.pack("<I20s", id, bytes.fromhex(address[2:]))
@@ -36,49 +36,20 @@ def serialize_token(token):
         struct.pack("B", token["decimals"]) + \
         bytes(token["ticker"], "ascii") + b'\0'
 
-def pad_write(f, m, buf, page_limit):
-    f.write(buf)
-    m.update(buf)
-
-    if page_limit != PAGE_SIZE:
-        return
-
-    size = len(buf)
-    padlen = WORD_SIZE - (size % WORD_SIZE)
-
-    while padlen > 0:
-        f.write((0x80 | padlen).to_bytes(1))
-        m.update((0x80 | padlen).to_bytes(1))
-        padlen = padlen - 1
-        size = size + 1
-
-    while size < PAGE_SIZE:
-        f.write(0xff.to_bytes(1))
-        m.update(0xff.to_bytes(1))
-        size = size + 1
-
-def serialize_db(f, m, page_align, chains, tokens, db_version):
-    page_limit = PAGE_SIZE if page_align else 0xffffffff
+def serialize_db(f, m, chains, tokens, db_version, db_h):
     buf = struct.pack("<HHI", VERSION_MAGIC, 4, db_version)
 
     for chain in chains.values():
         serialized_chain = serialize_chain(chain)
-        if len(buf) + len(serialized_chain) <= page_limit:
-            buf = buf + serialized_chain
-        else:
-            pad_write(f, m, buf, page_limit)
-            buf = serialized_chain
+        buf = buf + serialized_chain
 
     for token in tokens.values():
         serialized_token = serialize_token(token)
-        if len(buf) + len(serialized_token) <= page_limit:
-            buf = buf + serialized_token
-        else:
-            pad_write(f, m, buf, page_limit)
-            buf = serialized_token
+        buf = buf + serialized_token
 
-    if len(buf) > 0:
-        pad_write(f, m, buf, page_limit)
+    f.write(buf)
+    m.update(buf)
+    db_h.update(buf[8:])
 
 
 def lookup_chain(chains_json, chain_id):
@@ -116,10 +87,11 @@ def process_token(tokens, chains, token_json, chains_json):
 
     token["addresses"][chain_id] = token_json["address"]
 
-def generate_token_bin_file(token_list, chain_list, output, db_version, page_align):
+def generate_token_bin_file(token_list, chain_list, output, db_version):
     token_list = json.load(open(token_list))
     chain_list = json.load(open(chain_list))
     m = hashlib.sha256()
+    db_h = hashlib.sha256()
 
     tokens = {}
     chains = {}
@@ -128,9 +100,9 @@ def generate_token_bin_file(token_list, chain_list, output, db_version, page_ali
         process_token(tokens, chains, token, chain_list)
 
     with open(output, 'wb') as f:
-        serialize_db(f, m, page_align, chains, tokens, db_version)
+        serialize_db(f, m, chains, tokens, db_version, db_h)
         m_hash = m.digest()
         signature = sign(m_hash)
+        db_hash = db_h.digest()
         f.write(signature)
-
-    return m_hash.hex()
+    return db_hash.hex()

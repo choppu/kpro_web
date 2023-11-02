@@ -14,7 +14,7 @@ from common.utils import iter_query
 from .models import DB
 from .db_updater import DBUpdate
 
-DELTA_DBS = 200
+DELTA_DBS = 500
 
 class UpdateDBForm(forms.ModelForm):
     class Meta:
