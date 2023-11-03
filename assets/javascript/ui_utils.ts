@@ -23,4 +23,11 @@ export namespace UIUtils {
     msgField.innerHTML = msg;
     msgField.classList.contains("kpro_web__display-none") && msg != "" ? msgField.classList.remove("kpro_web__display-none") : msgField.classList.add("kpro_web__display-none");
   }
+
+  export function addSelectOption(selectField: HTMLSelectElement, options: string[]) : void {
+    for(let i = 0; i < options.sort().length; i++) {
+      let option = new Option(options[i],options[i]);
+      selectField.add(option, undefined);
+    }
+  }
 }
