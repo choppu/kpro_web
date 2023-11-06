@@ -12,8 +12,10 @@
   {% block menu %}
   {% include './menu.html' %}
   {% endblock %}
-  {% block content %}
-  {% endblock %}
+  <div class="kpro_web__main-container">
+    {% block content %}
+    {% endblock %}
+  </div>
   {% block footer %}
   {% include './footer.html' %}
   {% endblock %}

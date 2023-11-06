@@ -174,6 +174,10 @@ body {
   box-sizing: border-box;
 }
 
+.kpro_web__main-container {
+  min-height: 800px;
+}
+
 .kpro_web__menu-container {
   width: 90%;
   display: block;
@@ -248,16 +252,22 @@ body {
 
 .db_updater__top-label-container {
   font-size: 2em;
-  padding: 1.5em 0 1em 0;
+  padding: 3em 0 1em 0;
   box-sizing: border-box;
   text-align: center;
+  line-height: 1.4em;
+  width: 90%;
+  margin: 0 auto;
 }
 
 .db_updater__label-container {
   font-size: 2em;
-  padding: 0 0 1.5em 0;
+  padding: 1.5em 0;
   box-sizing: border-box;
   text-align: center;
+  line-height: 1.4em;
+  width: 90%;
+  margin: 0 auto;
 }
 
 .db_updater__btn-container {
@@ -448,7 +458,7 @@ progress::-moz-progress-value {
 
 .kpro_web__release-note {
   width: 50%;
-  margin: 2em auto;
+  margin: 2em auto 4em auto;
   background: white;
   color: rgb(22, 22, 35);
   padding: 2em 3em;
@@ -526,7 +536,36 @@ progress::-moz-progress-value {
   display: none;
 }
 
+.kpro_web__delta-container {
+  width: 90%;
+  margin: 2em auto 1em auto;
+  text-align: center;
+}
+
+.kpro_web__delta-select {
+  background: white;
+  font-family: 'Chivo Mono', cursive;
+  border: none;
+  color: rgb(22, 22, 35);
+  display: inline-block;
+  font-size: 1.2em;
+  font-weight: 300;
+  padding: .7em .3em;
+  border: solid 2px white;
+  box-shadow: 0 3px 3px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
+  line-height: 2em;
+  outline: none;
+}
+
+option {
+  text-align: center;
+}
+
 @media screen and (max-width: 570px) {
+  .kpro_web__main-container {
+    min-height: 300px;
+  }
+
   .kpro_web__menu {
     width: 50%;
   }
@@ -582,6 +621,7 @@ progress::-moz-progress-value {
     height: 330px;
     display: block;
     margin: 0 auto;
+    box-sizing: border-box;
   }
 
   #qr-canvas, .device_verify__scan-container {
@@ -597,7 +637,6 @@ progress::-moz-progress-value {
     padding: 0;
     box-sizing: border-box;
   }
-
 
   .device_verify__scan-container {
     width: 450px;

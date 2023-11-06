@@ -13,16 +13,14 @@ if (!('process' in window)) {
   window.process = {}
 }
 
-async function generateQR(context: any, mediaPrefix: string, currentVersion: string, dbQR: any) : Promise<void> {
+async function generateQR(context: any, mediaPrefix: string, currentVersion: string, dbQR: any) : Promise<UREncoder> {
   const resp = await fetch(mediaPrefix + context["version"] + '/deltas/delta-' + context["version"] + '-' + currentVersion + '.bin');
   const deltaArr = await resp.arrayBuffer();
   const deltaBuff = QRUtils.toBuffer(deltaArr);
   const ur = new UR(deltaBuff, "fs-data");
   const maxFragmentLength = 450;
-  const encoder = new UREncoder(ur, maxFragmentLength);
 
-  let setTimer = encoder.fragmentsLength > 1 ? true : false;
-  QRUtils.generateQRPart(encoder, dbQR, setTimer, 450);
+  return new UREncoder(ur, maxFragmentLength);
 }
 
 async function handleERC20DB() : Promise<void> {
@@ -46,11 +44,13 @@ async function handleERC20DB() : Promise<void> {
   let transport: Transport;
   let appEth: Eth;
 
+  let encoder: {enc: UREncoder | undefined} = {enc: undefined};
+
   dbLoad.max = dbArr.byteLength;
 
   versionSelect.addEventListener("change", async() => {
     if(versionSelect.value != "") {
-      await generateQR(context, mediaPrefix.value, versionSelect.value, dbQR);
+      encoder.enc = await generateQR(context, mediaPrefix.value, versionSelect.value, dbQR);
       dbVersionLabel.innerHTML = "DB delta version " + context["version"] + '-' + versionSelect.value;
       dbQRContainer.classList.remove("kpro_web__display-none");
       dbVersionContainer.classList.remove("kpro_web__display-none");
@@ -59,6 +59,8 @@ async function handleERC20DB() : Promise<void> {
       dbVersionContainer.classList.add("kpro_web__display-none");
     }
   });
+
+  setTimeout(() => {QRUtils.generateQRPart(encoder, dbQR, true, 450)}, 500);
 
   dbUSBUpdateBtn.addEventListener("click", async () => {
     try {

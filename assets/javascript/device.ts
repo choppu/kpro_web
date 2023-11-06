@@ -91,7 +91,7 @@ function handleVerificationComplete(r: any) : void {
   if(r['status'] == 'success') {
     const successQR = new QRious({element: document.getElementById('device_success__qr')}) as any;
     const ur = new UR(Buffer.from(r.payload, "hex"), "dev-auth");
-    const encoder = new UREncoder(ur, maxFragmentLength);
+    const encoder = {enc: new UREncoder(ur, maxFragmentLength)};
 
     QRUtils.generateQRPart(encoder, successQR, false, 400);
   }
@@ -130,7 +130,7 @@ async function handleVerifyDevice() : Promise<void> {
   const verifyQR = new QRious({element: document.getElementById('device_verify__qr')}) as any;
   const payload = QRUtils.encodeChallenge(challenge.value);
   const ur = new UR(payload, "dev-auth");
-  const encoder = new UREncoder(ur, maxFragmentLength);
+  const encoder = {enc: new UREncoder(ur, maxFragmentLength)};
   const decoder = new URDecoder();
   const html5QrCode = new Html5Qrcode("device_verify__qr-reader");
   const config = {fps: 10, qrbox: 600, aspectRatio: 1};
