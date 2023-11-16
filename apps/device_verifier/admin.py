@@ -69,5 +69,3 @@ class DeviceVerifyAdmin(admin.ModelAdmin):
         return super().render_change_form(request, context, add, change, form_url, obj)
 
 admin.site.register(Device, DeviceVerifyAdmin)
-
-LogEntry.objects.all().delete()

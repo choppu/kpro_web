@@ -98,5 +98,3 @@ class FirmwareAdmin(admin.ModelAdmin):
 
 admin.site.register(Firmware, FirmwareAdmin)
 
-LogEntry.objects.all().delete()
-
