@@ -138,7 +138,7 @@ STATIC_URL = '/static/'
 STATICFILES_DIRS = (os.path.join(BASE_DIR, "static"),)
 
 # Media Files
-MEDIA_ROOT = os.path.join(BASE_DIR, 'uploads')
+MEDIA_ROOT = os.environ.get("KPRO_UPLOAD_DIR", os.path.join(BASE_DIR, 'uploads'))
 MEDIA_URL = '/uploads/'
 
 # Default primary key field type
