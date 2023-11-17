@@ -18,10 +18,8 @@ services:
     container_name: kpro_db
     volumes:
       - postgres_data:/var/lib/postgresql/data/
-    environment:
-      - POSTGRES_USER=root
-      - POSTGRES_PASSWORD=password
-      - POSTGRES_DB=kpro_web_dev
+    env_file:
+      - ./.env.dev.db
     ports:
       - 5432:5432
 

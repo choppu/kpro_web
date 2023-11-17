@@ -87,6 +87,7 @@ local_settings.py
 
 .env.dev
 .env.prod
+.env.dev.db
 .env.prod.db
 db.sqlite3
 node_modules/
