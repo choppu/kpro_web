@@ -3,7 +3,7 @@ from django import forms
 from django.contrib.admin.models import LogEntry
 from pagedown.widgets import AdminPagedownWidget
 from django.db import IntegrityError, transaction
-from django.contrib import messages
+from django.conf import settings
 
 from .models import Firmware
 from common.utils import makedirs
@@ -30,7 +30,7 @@ class FirmwareAdmin(admin.ModelAdmin):
 
         if obj != None:
             fw_version = obj.version
-            chl_p = 'uploads/' + fw_version + '/changelog.md'
+            chl_p = settings.MEDIA_ROOT + '/' + fw_version + '/changelog.md'
 
             form.base_fields['version'].disabled = True
             form.base_fields['firmware'].required = False
@@ -58,7 +58,7 @@ class FirmwareAdmin(admin.ModelAdmin):
         form_data = form.cleaned_data
         fw = form_data["firmware"]
         chl = form_data["changelog"]
-        output_dir = 'uploads/' + form_data["version"]
+        output_dir = settings.MEDIA_ROOT + '/' + form_data["version"]
 
         makedirs(output_dir)
 
@@ -75,7 +75,6 @@ class FirmwareAdmin(admin.ModelAdmin):
             super().save_model(request, obj, form, change)
         except IntegrityError as e:
             delete_fw(form_data["version"])
-            print(e)
 
     def render_change_form(self, request, context, add=True, change=True, form_url='', obj=None):
         context.update({
@@ -85,7 +84,6 @@ class FirmwareAdmin(admin.ModelAdmin):
         return super().render_change_form(request, context, add, change, form_url, obj)
 
     def delete_model(self, request, obj):
-        print("Hello2")
         delete_fw(obj.version)
         super().delete_model(request, obj)
 
@@ -97,6 +95,4 @@ class FirmwareAdmin(admin.ModelAdmin):
 
 
 admin.site.register(Firmware, FirmwareAdmin)
-
-LogEntry.objects.all().delete()
 

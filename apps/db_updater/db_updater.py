@@ -1,6 +1,7 @@
 import itertools
 import json
 from common.utils import makedirs, deletedirs, zip_db_files
+from django.conf import settings
 from .token_db import generate_token_bin_file
 from .db_delta import generate_db_deltas
 from urllib.request import urlopen
@@ -23,7 +24,7 @@ class DBUpdate:
     self.dbs = prev_dbs
 
   def upload_db(self):
-    p = 'uploads/' + self.db_version
+    p = settings.MEDIA_ROOT + '/' + self.db_version
     makedirs(p)
 
     delta_out_path = p + '/deltas'
@@ -43,5 +44,5 @@ class DBUpdate:
     return file_hash
 
   def delete_db(db_version):
-    p = 'uploads/' + db_version
+    p = settings.MEDIA_ROOT + '/' + db_version
     deletedirs(p)

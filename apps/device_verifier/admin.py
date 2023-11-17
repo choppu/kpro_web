@@ -52,7 +52,6 @@ class DeviceVerifyAdmin(admin.ModelAdmin):
                 Device.objects.bulk_create(data)
                 self.message_user(request, "Your csv file has been imported")
             except IntegrityError as e:
-                print(e)
                 if 'UNIQUE constraint' in str(e.args):
                     msg = "Device already exists. Please check your csv."
                     self.message_user(request, msg, level=messages.ERROR)
@@ -69,5 +68,3 @@ class DeviceVerifyAdmin(admin.ModelAdmin):
         return super().render_change_form(request, context, add, change, form_url, obj)
 
 admin.site.register(Device, DeviceVerifyAdmin)
-
-LogEntry.objects.all().delete()

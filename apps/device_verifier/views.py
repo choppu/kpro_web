@@ -1,6 +1,5 @@
 from django.shortcuts import render
 from django.http import HttpResponse
-from kpro_web.settings import TEMPLATE_DIR
 from secp256k1Crypto import PublicKey, PrivateKey
 from .models import Device
 from cbor2 import dumps
@@ -13,7 +12,6 @@ import time
 import os
 
 # Create your views here.
-APP_TEMPLATE_DIR = TEMPLATE_DIR + '/kpro_app/'
 enc_key = os.environ['DEVICE_VERIFICATION_SIGN_KEY']
 
 state = {
@@ -37,7 +35,7 @@ def index(request):
     "challenge": secrets.token_hex(32)
   }
 
-  return render(request, APP_TEMPLATE_DIR + 'device_verify.html', context)
+  return render(request, 'kpro_app/device_verify.html', context)
 
 def verify_signature(uid, challenge, signature, public_key):
   m = hashlib.sha256()

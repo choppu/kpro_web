@@ -1,19 +1,16 @@
 import json
 from django.shortcuts import render
-from kpro_web.settings import TEMPLATE_DIR
 from .models import DB
 from django.views.decorators.http import require_GET
 from django.http import HttpResponse
 from common.utils import iter_query
 
-
-APP_TEMPLATE_DIR = TEMPLATE_DIR + '/kpro_app/'
 DELTA_DBS = 500
 
 # Create your views here.
 
 def index(request):
-  return render(request, APP_TEMPLATE_DIR + 'db.html')
+  return render(request, 'kpro_app/db.html')
 
 def db_context(request):
   db = DB.objects.last()

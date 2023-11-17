@@ -88,6 +88,4 @@ admin.site.site_header = "Keycard Pro Web"
 admin.site.site_title = "Keycard Pro Web"
 admin.site.index_title = "Admin"
 
-LogEntry.objects.all().delete()
-
 

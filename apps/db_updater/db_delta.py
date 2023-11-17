@@ -2,6 +2,7 @@ import hashlib
 import struct
 
 from common.utils import sign
+from django.conf import settings
 
 DELTA_MAGIC = 0x444c
 CHAIN_MAGIC = 0x4348
@@ -87,11 +88,11 @@ def generate_db_delta(output, delta, delta_db_ver, m):
     f.write(signature)
 
 def generate_db_deltas(db_version, prev_dbs, out_path):
-  latest_db_path = 'uploads/' + db_version + '/db.bin'
+  latest_db_path = settings.MEDIA_ROOT + '/' + db_version + '/db.bin'
   latest_db = process_bin(latest_db_path)
 
   for db_ver in prev_dbs:
-    prev_db_path = 'uploads/' + db_ver + '/db.bin'
+    prev_db_path = settings.MEDIA_ROOT + '/' + db_ver + '/db.bin'
     prev_db = process_bin(prev_db_path)
     m = hashlib.sha256()
     out_p = out_path + '/delta-' + db_version + '-' + db_ver + '.bin'

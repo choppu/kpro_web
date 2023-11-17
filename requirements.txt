@@ -1,0 +1,10 @@
+Django==4.2.3
+django-environ==0.11.2
+django-pagedown==2.2.1
+django-extensions==3.2.3
+secp256k1Crypto==0.0.1
+cbor2==5.5.1
+Werkzeug==3.0.1
+pyOpenSSL==23.3.0
+psycopg2-binary==2.9.9
+gunicorn==21.2.0
