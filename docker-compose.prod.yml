@@ -5,7 +5,7 @@ services:
     build:
       context: .
       dockerfile: Dockerfile.prod
-    command: gunicorn kpro_web.wsgi:application --keyfile selftest-cert.key --certfile selftest-cert.crt --bind 0.0.0.0:8000
+    command: gunicorn kpro_web.wsgi:application --keyfile nginx/selftest-cert.key --certfile nginx/selftest-cert.crt --bind 0.0.0.0:8000
     expose:
       - 8000
     volumes:
@@ -24,11 +24,13 @@ services:
   nginx:
     build: ./nginx
     ports:
-      - 1337:80
+      - 80:80
+      - 443:443
     depends_on:
       - web
     volumes:
       - static_volume:/home/kpro_web/web/staticfiles
+      - kpro_data:/var/lib/kpro/data/
 
 volumes:
   postgres_data:

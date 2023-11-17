@@ -4,7 +4,7 @@ services:
   web:
     build: .
     container_name: kpro_web
-    command: python manage.py runserver_plus --key-file selftest-key --cert-file selftest-cert 0.0.0.0:8000
+    command: python manage.py runserver_plus --key-file nginx/selftest-key --cert-file nginx/selftest-cert 0.0.0.0:8000
     volumes:
       - kpro_data:/var/lib/kpro/data/
     ports:
