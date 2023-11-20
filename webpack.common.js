@@ -7,7 +7,6 @@ module.exports = {
     device: './assets/javascript/device.ts',
     firmware: './assets/javascript/firmware.ts'
   },
-  devtool: 'inline-source-map',
   module: {
     rules: [
       {
