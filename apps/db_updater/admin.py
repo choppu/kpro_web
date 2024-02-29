@@ -7,6 +7,7 @@ from django.contrib import messages
 from django.utils.html import format_html
 from django.conf import settings
 from common.utils import iter_query
+import datetime
 
 
 # Register your models here.
@@ -46,7 +47,10 @@ class UpdateDBAdmin(admin.ModelAdmin):
         if last_entry:
             def_vals = {'erc20_url': last_entry.erc20_url, 'chain_url': last_entry.chain_url}
         else:
-             def_vals = {'erc20_url': None, 'chain_url': None}
+             def_vals = {'erc20_url': None, 'chain_url': None, }
+
+        def_vals["version"] = datetime.datetime.now().strftime("%Y%m%d")
+
         return def_vals
 
     def render_change_form(self, request, context, add=True, change=False, form_url='', obj=None):
